@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>音频转文字 · AudioScribe</title><link rel="stylesheet" href="app.css"></head>
+<body>
+<header><a class="brand" href="app.html"><img src="icons/logo.svg" alt=""><span>音频转文字<small>AudioScribe</small></span></a><div class="header-right"><span class="privacy">本地处理 · 文件不上传云端</span><span class="version">0.1 测试版</span></div></header>
+<main>
+<section class="intro"><span class="eyebrow">让声音成为清晰的文字</span><h1>录音留住声音，文字留住重点。</h1><p>导入会议录音，生成逐字稿，再整理一份可编辑的会议记录。</p></section>
+<section class="card upload-card" id="upload-card">
+<div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="选择或拖入录音文件"><div class="audio-mark" aria-hidden="true">▂ ▆ █ ▅ ▂</div><h2 id="file-label">拖入录音，或点击选择文件</h2><p id="file-detail">MP4 / MP3 / M4A / WAV · 最多 500 MB、4 小时</p><span class="choose">选择文件</span></div>
+<input type="file" id="file" accept=".mp4,.mp3,.m4a,.wav,.webm,.ogg,.flac" hidden>
+<div class="settings"><label>录音语言<select id="language"><option value="auto">自动识别</option><option value="zh">中文</option><option value="en">英语</option><option value="ja">日语</option><option value="fr">法语</option><option value="es">西班牙语</option><option value="ko">韩语</option><option value="ru">俄语</option></select></label><label>会议标题<input id="title" placeholder="例如：产品周会" maxlength="200"></label><button id="start" class="primary" disabled>开始转写</button></div>
+<details><summary>更多选项</summary><div class="advanced"><label>识别模型<select id="model"><option value="base">均衡 · Base</option><option value="tiny">更快 · Tiny（准确率较低）</option><option value="small">更准 · Small（更慢）</option></select></label><p>模型首次使用需要下载，之后可离线转写。长录音和较大模型需要更长时间。请确认你有权处理这份录音。</p></div></details>
+</section>
+<section id="status-panel" class="status" aria-live="polite"><div><span id="status-dot"></span><strong id="status-text">选择一份录音，即可开始</strong><p id="status-detail">无需安装 Python，也不需要运行命令。</p></div><button id="retry" class="secondary" hidden>重新连接</button><button id="cancel" class="secondary" hidden>停止处理</button><progress id="progress" max="100" value="0" hidden></progress></section>
+<section id="results" class="card result-card" hidden>
+<div class="result-top"><nav aria-label="结果"><button id="tab-transcript" class="tab active" aria-selected="true">逐字稿 <span id="count">0</span></button><button id="tab-minutes" class="tab" aria-selected="false">会议记录</button></nav><div class="exports"><select id="format" aria-label="导出格式"><option value="txt">TXT 文本</option><option value="docx">Word 文档</option><option value="srt">SRT 字幕</option></select><button id="export" class="secondary">导出</button></div></div>
+<div id="transcript-panel"><div class="result-hint">点击时间回听，点击文字修改。第一版不自动区分发言人。</div><audio id="player" controls preload="metadata"></audio><div id="segments"></div></div>
+<div id="minutes-panel" hidden><div class="result-hint">默认按关键词生成摘录草稿。决定、负责人和日期请核对原文。</div><div class="ai-bar"><button id="refresh-draft" class="secondary">用已修改文字重建草稿</button><details id="ai-options"><summary>本地 AI 整理（可选）</summary><p>需另行安装 Ollama 和本地文本模型；只连接本机，不使用云端模型。</p><div class="ai-controls"><button id="detect-models" class="secondary">检测本地模型</button><select id="ai-model" aria-label="本地 AI 模型"><option value="">请先检测模型</option></select><button id="summarize" class="primary" disabled>整理会议记录</button></div><p id="ai-detail">没有本地 AI 也能转写、编辑和导出。</p></details></div><textarea id="minutes" aria-label="编辑会议记录" spellcheck="false"></textarea></div>
+<footer class="result-footer"><span>离开页面前请导出。关闭页面后记录不再保留。</span><button id="clear" class="text-button">清除本次记录</button></footer>
+</section>
+<footer class="page-footer">语音识别可能听错人名、数字或重叠发言；会议草稿需人工核对。<button id="help" class="text-button">安装与帮助</button></footer>
+<dialog id="help-dialog"><h2>开始使用音频转文字</h2><p>先运行 AudioScribe-Setup-v0.1.0.exe，安装完成后按窗口引导加载插件。</p><p>首次下载识别模型时请保持网络连接。模型准备好后，转写可离线运行。原始文件始终在你的电脑上。</p><p>可选本地 AI 整理需另装 Ollama 和文本模型，建议至少 16 GB 内存。没有它也能生成摘录草稿。</p><p>请在离开页面前导出记录。意外断电可能留下临时音频，下次启动助手后，超过一天的临时文件会被清理。</p><button id="help-close" class="primary">知道了</button></dialog>
+</main><script src="app.js"></script></body></html>

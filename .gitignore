@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+build/
+Data/
+models/
+runtime/
+*.exe
+*.zip
+*.log
+helper/config.json
+native-host.json
+extension-path.txt

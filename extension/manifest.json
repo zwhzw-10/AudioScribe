@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "音频转文字 · AudioScribe",
+  "description": "本地录音转写、带时间的逐字稿与可编辑会议草稿。",
+  "version": "0.1.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoCoBrxSU04QuyVNFVsqRfuroPmQ5TaJ9RhtiM3fcYKO7DOv1Nl6bu0Rze8+E2u5dsi/IKjC04VZ5h1ij5OScfx0xdnpzt4OJK6lFXU8ZyNxYWu45EJAIxhZl8PUHJ9Y9RAwMsudjdUdnp7FK9i8FmeqNLmxR9VKGGFL0+IR/jBevHhDb/JwIO1pyae2CwVwda9U24EDAW3GS2LpQZQe5mVBU/puvjiRGzm+ROqyp3KUBgr/uaLmsDB5wKOQqG1T6BgrB5hwwehDyL/K7Ij2H+BSoT6X8M1pPMgB/7uKhmf4UN7ws85lmqoyGJ4phQmU4180p2N4yYvCWlvkBVH4FAQIDAQAB",
+  "permissions": [
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "打开音频转文字",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src http://127.0.0.1:*; media-src 'self' blob:"
+  }
+}
