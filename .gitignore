@@ -11,3 +11,10 @@ runtime/
 helper/config.json
 native-host.json
 extension-path.txt
+
+# macOS build and private runtime files
+.dist/
+runtime/
+native-host.json
+*.app/
+*.dmg

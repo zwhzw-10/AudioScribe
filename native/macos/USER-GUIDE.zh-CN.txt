@@ -1,0 +1,22 @@
+AudioScribe 0.1.0 — Mac preview 1
+
+适用环境：Apple Silicon（M 系列芯片）、macOS 14 或更新版本、Google Chrome 正式版。
+这是未使用 Developer ID 签名、未公证的预发布安装包；不包含 Intel Mac 版本。
+
+安装：
+1. 下载并解压 AudioScribe-Mac-v0.1.0-preview1.zip。
+2. 打开解压后的“AudioScribe Installer.app”，点击安装。
+   如 macOS 阻止打开，请先核对下载来源及 SHA256；不要关闭系统安全保护。
+3. 在 Chrome 地址栏打开 chrome://extensions，启用“开发者模式”，点击“加载已解压的扩展程序”。
+4. 在文件夹选择窗口按 Command-Shift-G，输入以下路径并确认，然后选择此文件夹：
+   ~/Library/Application Support/AudioScribe/Extension
+5. 将扩展固定到工具栏，打开扩展，按界面提示连接本地助手。首次使用需要联网下载模型。
+
+安装包内置 Python，无需 Homebrew 或系统 Python，无需管理员权限。
+更新前先结束转写；更新完成后在 chrome://extensions 重新加载扩展。
+安装数据位于 ~/Library/Application Support/AudioScribe/，其中 Data 保存模型和本机配对设置。
+不要移动已安装的 Extension 文件夹，不要分享 Data 中的配对设置。
+
+项目与源码：https://github.com/zwhzw-10/AudioScribe
+此预发布版本：https://github.com/zwhzw-10/AudioScribe/releases/tag/v0.1.0-macos-preview.1
+详细测试范围见同目录 VALIDATION.txt 及仓库 native/macos/VALIDATION.md。
