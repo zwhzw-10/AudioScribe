@@ -1,5 +1,9 @@
 # 音频转文字 · AudioScribe
 
+## Mac 测试版
+
+已增加 Apple Silicon（M 系列）macOS 14+ 安装器和原生助手适配。使用 Mac 安装包，解压后打开安装器；不要运行 Windows EXE。内置 Python，首次仍需在 Chrome 加载扩展。构建与数据目录见 [Mac 说明](native/macos/README.md)。下载 [Mac preview 1](https://github.com/zwhzw-10/AudioScribe/releases/tag/v0.1.0-macos-preview.1)；安装步骤见 [使用说明](native/macos/USER-GUIDE.zh-CN.txt)，测试范围与限制见 [验证记录](native/macos/VALIDATION.md)。
+
 独立的 Windows / Chrome 本地会议录音转写工具，0.1.0 测试版。与 CaptionCraft 字幕插件拥有不同的扩展 ID、助手注册和数据目录，可同时安装。
 
 ## 下载

@@ -3,8 +3,11 @@ import json,os,secrets,socket,struct,subprocess,sys,threading,time
 import urllib.request
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from platform_paths import data_directory, runtime_python, deno_path
+
 APP=Path(__file__).resolve().parents[1]
-HOME=Path(os.environ.get('AUDIOSCRIBE_HOME', str(Path(os.environ['LOCALAPPDATA'])/'AudioScribe'/'Data')))
+HOME=data_directory('AudioScribe', 'AUDIOSCRIBE_HOME')
 MAX_MESSAGE=65536
 
 def read_exact(stream,size):
@@ -30,9 +33,15 @@ class Assistant:
     def __init__(self,home=HOME,app=APP):
         self.home,self.app=home,app
         self.child=None;self.log=None;self.endpoint=None;self.lock=threading.Lock();self.error=None
-        self.home.mkdir(parents=True,exist_ok=True)
-        cfg=self.home/'helper/config.json';cfg.parent.mkdir(exist_ok=True)
-        if not cfg.exists(): cfg.write_text(json.dumps({'token':secrets.token_urlsafe(32)}),encoding='utf8')
+        self.home.mkdir(parents=True,exist_ok=True,mode=0o700)
+        cfg=self.home/'helper/config.json';cfg.parent.mkdir(exist_ok=True,mode=0o700)
+        try:
+            descriptor=os.open(cfg,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+        except FileExistsError:
+            pass
+        else:
+            with os.fdopen(descriptor,'w',encoding='utf8') as stream:
+                json.dump({'token':secrets.token_urlsafe(32)},stream)
         self.token=json.loads(cfg.read_text(encoding='utf8'))['token']
         self.opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
@@ -45,10 +54,18 @@ class Assistant:
             self.endpoint=f'http://127.0.0.1:{port}'
             env=os.environ.copy();env['AUDIOSCRIBE_HOME']=str(self.home)
             env['HF_HUB_DISABLE_SYMLINKS_WARNING']='1'
-            env['HF_HUB_OFFLINE']='0';env['HF_HUB_DISABLE_TELEMETRY']='1';env['PYTHONUTF8']='1'
+            env.setdefault('HF_HUB_OFFLINE','0');
+            # Standard HTTPS downloads work reliably with macOS network proxies.
+            if sys.platform == 'darwin':
+                import certifi
+                env.setdefault('HF_HUB_DISABLE_XET','1')
+                env.setdefault('SSL_CERT_FILE',certifi.where())
+            env['HF_HUB_DISABLE_TELEMETRY']='1';env['PYTHONUTF8']='1'
             env['PYTHONNOUSERSITE']='1';env.pop('PYTHONPATH',None);env.pop('PYTHONHOME',None)
             self.log=open(self.home/'assistant.log','wb')
-            python=self.app/'runtime/python.exe'
+            python=runtime_python(self.app)
+            if not python.is_file():
+                raise FileNotFoundError('Bundled Python is missing; reinstall the assistant.')
             self.child=subprocess.Popen([str(python),'-I','-u',str(self.app/'helper/server.py'),'--allow-download','--port',str(port)],
                 cwd=self.app,env=env,stdin=subprocess.DEVNULL,stdout=self.log,stderr=self.log,
                 creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
